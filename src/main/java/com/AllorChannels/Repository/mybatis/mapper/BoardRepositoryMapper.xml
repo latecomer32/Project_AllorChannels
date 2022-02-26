@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.AllorChannels.Repository.BoardRepository">
+
+	<resultMap type="com.AllorChannels.Dto.UserDto" id="UserDto">
+		<!-- <result property="memberName" column="member_name"/> -->
+	</resultMap>
+
+
+	<insert id="saveTheWriting" parameterType="com.AllorChannels.Dto.Board">
+		insert into
+		board(title, content, nickName, categoryName, channelName)
+		values(#{title},#{content},
+		#{nickName}, #{categoryName},
+		#{channelName})
+	</insert>
+
+	<select id="getWritingList" resultType="com.AllorChannels.Dto.Board">
+		select * from board
+		<where>
+			<if test="query !=null and query != ''">
+				${field} like '%${query}%'
+			</if>
+
+			and
+			<if test="categoryName != ''">
+				categoryName = #{categoryName}
+			</if>
+
+			<if test="categoryName ==''">
+				categoryName like '%${categoryName}%'
+			</if>
+			and
+			<if test="uri != '/index/category' and uri !='/index/category/detail'+'/'+no">
+				nickName like '%%'
+			</if>
+
+			<if test="uri =='/index/category' or uri =='/index/category/detail'+'/'+no">
+				nickName = #{nickName}
+			</if>
+			and
+			<if test="uri != '/index/channels/'+channelName and uri != '/index/channels/detail/'+channelName+'/'+no">
+				channelName like '%%'
+			</if>
+
+			<if test="uri == '/index/channels/'+channelName or uri == '/index/channels/detail/'+channelName+'/'+no">
+				channelName = #{channelName}
+			</if>
+
+			and pub = #{pub}
+			order by ${order} ${desc}
+			limit #{offset}, #{size}
+		</where>
+		<!-- uri !='/index/channels'  -->
+	</select>
+
+	<delete id="deleteWritingList">
+		DELETE FROM board WHERE no =${no}
+	</delete>
+
+	<select id="getWritingCount" resultType="int">
+		SELECT COUNT(no) COUNT
+		FROM
+		(SELECT * FROM board WHERE ${field} LIKE '%${query}%' ORDER BY
+		date DESC)N
+	</select>
+
+	<select id="getWritingDetail" resultType="com.AllorChannels.Dto.Board">
+		SELECT * FROM board
+		WHERE no=#{no}
+	</select>
+
+
+
+	<select id="getChannelWritingList" parameterType="com.AllorChannels.Dto.Channel" resultType="com.AllorChannels.Dto.Board">
+	
+			<foreach item="getChannelList" collection="getChannelList" open="" close="" separator="UNION ALL">
+			
+			(select * from board where channelName = #{getChannelList.title} order by date DESC limit 0,#{size})
+			
+			
+			</foreach>
+	</select>
+
+	<update id="updateWritingList" parameterType="com.AllorChannels.Dto.Board">
+		update board set title=#{title},content=#{content}, categoryName=#{categoryName} where no=#{no} 
+	</update>
+
+
+</mapper>

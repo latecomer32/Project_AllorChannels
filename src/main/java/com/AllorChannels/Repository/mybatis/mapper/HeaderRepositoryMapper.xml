@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.AllorChannels.Repository.HeaderRepository">
+  
+  <resultMap type="com.AllorChannels.Dto.UserDto" id="UserDto">
+  	<!-- <result property="memberName" column="member_name"/> -->
+  </resultMap>
+  
+	<insert id="insert" parameterType="com.AllorChannels.Dto.UserDto">
+		insert into user(userId, email, nickName, password, role)
+		values(#{userId},#{email}, #{nickName}, #{password}, #{role})
+	</insert>
+	
+	<insert id="saveChannel" >
+		insert into channel(title, nickName)
+		values(#{channelName}, #{nickName})
+	</insert>
+	
+	<select id="getChannelName" resultType="String">
+		SELECT title FROM channel WHERE nickName = #{nickName}
+	</select>
+	
+	
+	<select id="findByUserId" parameterType="com.AllorChannels.Dto.UserDto" resultType="com.AllorChannels.Dto.UserDto">
+		SELECT * FROM user WHERE userId = #{userId}
+	</select>
+	
+	
+		<select id="getMemberList" resultType="com.AllorChannels.Dto.UserDto">
+		select * from user
+		<where>
+			<if test="query !=null and query != ''">
+				${field} like '%${query}%'
+			</if>
+			and pub = #{pub}
+		</where>
+		order by ${order} ${desc}
+		limit #{offset}, #{rowNum}
+	</select>
+	
+	<select id="getMemberCount" resultType="int">
+		SELECT COUNT(no) COUNT FROM 
+		(SELECT * FROM user WHERE ${field} LIKE '%${query}%' ORDER BY date DESC)N
+	</select>
+	
+	<delete id="cancelMembership">
+		DELETE FROM user, category, channel, channelcategory, board using user LEFT JOIN
+		category on user.nickName = category.nickName LEFT JOIN channel on user.nickName = channel.nickName LEFT JOIN channelcategory on channel.title = channelcategory.title LEFT JOIN board on user.nickName=board.nickName where
+		user.nickName=#{nickName}
+	</delete>
+</mapper>

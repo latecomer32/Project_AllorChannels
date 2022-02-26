@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="root.*" template="/WEB-INF/view/root/layout.jsp">
+		<put-attribute name="title" value="공지사항" />
+		<put-attribute name="header" value="/WEB-INF/view/root/header.jsp" />
+		<put-attribute name="leftDisplay" value="/WEB-INF/view/root/leftDisplay.jsp" />
+		<put-attribute name="middleDisplay" value="/WEB-INF/view/root/{1}.jsp" />
+		<put-attribute name="rightDisplay" value="/WEB-INF/view/root/rightDisplay.jsp" />
+	</definition>
+	
+	<definition name="member.*" template="/WEB-INF/view/member/member_layout.jsp">
+		<put-attribute name="title" value="공지사항" />
+		<put-attribute name="header" value="/WEB-INF/view/root/header.jsp" />
+		<put-attribute name="leftDisplay" value="/WEB-INF/view/member/member_leftDisplay.jsp" />
+		<put-attribute name="middleDisplay" value="/WEB-INF/view/root/{1}.jsp" />
+		<put-attribute name="rightDisplay" value="/WEB-INF/view/root/rightDisplay.jsp" />
+	</definition>
+	
+	
+
+</tiles-definitions>
