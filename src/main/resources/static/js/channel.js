@@ -33,7 +33,7 @@ $("#deleteChannel").on("click", function (e) {
     })
       .done(function (resp) {
         alert("채널 삭제 완료");
-        location.href = "/index";
+        location.reload();
       })
       .fail(function (error) {
         alert(JSON.stringify(error));

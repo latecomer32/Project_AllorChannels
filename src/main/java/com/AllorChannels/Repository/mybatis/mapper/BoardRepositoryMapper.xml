@@ -9,15 +9,18 @@
 	</resultMap>
 
 
-	<insert id="saveTheWriting" parameterType="com.AllorChannels.Dto.Board">
+	<insert id="saveTheWriting"
+		parameterType="com.AllorChannels.Dto.Board">
 		insert into
-		board(title, content, nickName, categoryName, channelName)
+		board(title, content, nickName, categoryName,
+		channelName)
 		values(#{title},#{content},
 		#{nickName}, #{categoryName},
 		#{channelName})
 	</insert>
 
-	<select id="getWritingList" resultType="com.AllorChannels.Dto.Board">
+	<select id="getWritingList"
+		resultType="com.AllorChannels.Dto.Board">
 		select * from board
 		<where>
 			<if test="query !=null and query != ''">
@@ -33,19 +36,23 @@
 				categoryName like '%${categoryName}%'
 			</if>
 			and
-			<if test="uri != '/index/category' and uri !='/index/category/detail'+'/'+no">
+			<if
+				test="uri != '/index/category' and uri !='/index/category/detail'+'/'+no">
 				nickName like '%%'
 			</if>
 
-			<if test="uri =='/index/category' or uri =='/index/category/detail'+'/'+no">
+			<if
+				test="uri =='/index/category' or uri =='/index/category/detail'+'/'+no">
 				nickName = #{nickName}
 			</if>
 			and
-			<if test="uri != '/index/channels/'+channelName and uri != '/index/channels/detail/'+channelName+'/'+no">
+			<if
+				test="uri != '/index/channels/'+channelName and uri != '/index/channels/detail/'+channelName+'/'+no">
 				channelName like '%%'
 			</if>
 
-			<if test="uri == '/index/channels/'+channelName or uri == '/index/channels/detail/'+channelName+'/'+no">
+			<if
+				test="uri == '/index/channels/'+channelName or uri == '/index/channels/detail/'+channelName+'/'+no">
 				channelName = #{channelName}
 			</if>
 
@@ -53,7 +60,6 @@
 			order by ${order} ${desc}
 			limit #{offset}, #{size}
 		</where>
-		<!-- uri !='/index/channels'  -->
 	</select>
 
 	<delete id="deleteWritingList">
@@ -67,25 +73,26 @@
 		date DESC)N
 	</select>
 
-	<select id="getWritingDetail" resultType="com.AllorChannels.Dto.Board">
+	<select id="getWritingDetail"
+		resultType="com.AllorChannels.Dto.Board">
 		SELECT * FROM board
 		WHERE no=#{no}
 	</select>
 
 
 
-	<select id="getChannelWritingList" parameterType="com.AllorChannels.Dto.Channel" resultType="com.AllorChannels.Dto.Board">
-	
-			<foreach item="getChannelList" collection="getChannelList" open="" close="" separator="UNION ALL">
-			
-			(select * from board where channelName = #{getChannelList.title} order by date DESC limit 0,#{size})
-			
-			
-			</foreach>
+	<select id="getChannelWritingList" parameterType="com.AllorChannels.Dto.Channel"
+									   resultType="com.AllorChannels.Dto.Board">
+		<foreach item="getChannelList" collection="getChannelList" open="" close="" separator="UNION ALL">
+			(select * from board where channelName =
+			#{getChannelList.title} order by date DESC limit 0,#{size})
+		</foreach>
 	</select>
 
-	<update id="updateWritingList" parameterType="com.AllorChannels.Dto.Board">
-		update board set title=#{title},content=#{content}, categoryName=#{categoryName} where no=#{no} 
+	<update id="updateWritingList"
+		parameterType="com.AllorChannels.Dto.Board">
+		update board set title=#{title},content=#{content},
+		categoryName=#{categoryName} where no=#{no}
 	</update>
 
 

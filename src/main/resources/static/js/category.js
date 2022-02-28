@@ -16,7 +16,7 @@ function btn_deleteCategory() {
   })
     .done(function (resp) {
       alert("삭제가 완료되었습니다.");
-      location.href = "/index";
+      location.reload();
     })
     .fail(function (error) {
       alert("삭제할 항목을 먼저 체크하세요.");
@@ -44,7 +44,7 @@ function submitItem() {
   })
     .done(function (resp) {
       alert("등록이 완료되었습니다.");
-      location.href = "/index";
+      location.reload();
     })
     .fail(function (error) {
       alert(JSON.stringify(error));
